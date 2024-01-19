@@ -3727,6 +3727,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@danieldietrich/copy@npm:^0.4.2":
+  version: 0.4.2
+  resolution: "@danieldietrich/copy@npm:0.4.2"
+  checksum: 10bb11e6fffd60a0539a22764571114731040f138fe38ad3cd535938905d41d12f0463c3ae02f901131c944b0707f57847ee3bf3b10efa41b2de327d9fe14f23
+  languageName: node
+  linkType: hard
+
 "@discoveryjs/json-ext@npm:0.5.7, @discoveryjs/json-ext@npm:^0.5.3":
   version: 0.5.7
   resolution: "@discoveryjs/json-ext@npm:0.5.7"
@@ -36566,6 +36573,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"postinstall@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "postinstall@npm:0.9.0"
+  dependencies:
+    "@danieldietrich/copy": "npm:^0.4.2"
+    glob: "npm:^10.3.10"
+    minimist: "npm:^1.2.8"
+    resolve-from: "npm:^5.0.0"
+    resolve-pkg: "npm:^2.0.0"
+  bin:
+    postinstall: bin/postinstall.js
+  checksum: 6960fe6d4ef69bab931a814e697dd14304915be4a8ce6a6592b5044ab4f81507cd2f5680f062f5c032f6a126d72d4f665c0c9d489c688c5364d71c4fe207c42d
+  languageName: node
+  linkType: hard
+
 "postman-collection@npm:^4.1.2":
   version: 4.3.0
   resolution: "postman-collection@npm:4.3.0"
@@ -39081,6 +39103,15 @@ __metadata:
   version: 1.0.0
   resolution: "resolve-pkg-maps@npm:1.0.0"
   checksum: fb8f7bbe2ca281a73b7ef423a1cbc786fb244bd7a95cbe5c3fba25b27d327150beca8ba02f622baea65919a57e061eb5005204daa5f93ed590d9b77463a567ab
+  languageName: node
+  linkType: hard
+
+"resolve-pkg@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "resolve-pkg@npm:2.0.0"
+  dependencies:
+    resolve-from: "npm:^5.0.0"
+  checksum: c48af43563ae10fef4a20217808d7cc1de450837f5522963b559975d7b0bb28b7eee6f98bd815a93ebd083cc56b3139c520a22c066ee7abea73b819ea2764713
   languageName: node
   linkType: hard
 
@@ -42315,7 +42346,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"twenty-emails@workspace:packages/twenty-emails":
+"twenty-emails@workspace:*, twenty-emails@workspace:packages/twenty-emails":
   version: 0.0.0-use.local
   resolution: "twenty-emails@workspace:packages/twenty-emails"
   languageName: unknown
@@ -42335,6 +42366,7 @@ __metadata:
     "@nestjs/graphql": "patch:@nestjs/graphql@12.0.8#./patches/@nestjs+graphql+12.0.8.patch"
     "@ptc-org/nestjs-query-graphql": "patch:@ptc-org/nestjs-query-graphql@4.2.0#./patches/@ptc-org+nestjs-query-graphql+4.2.0.patch"
     class-validator: "patch:class-validator@^0.14.0#./patches/class-validator+0.14.0.patch"
+    twenty-emails: "workspace:*"
   languageName: unknown
   linkType: soft
 
