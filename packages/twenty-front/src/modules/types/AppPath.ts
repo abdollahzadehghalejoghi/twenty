@@ -20,6 +20,7 @@ export enum AppPath {
   RecordShowPage = '/object/:objectNameSingular/:objectRecordId',
 
   SettingsCatchAll = `/settings/*`,
+  SettingsWorkspaceMembers = `settings/workspace-members`,
   DevelopersCatchAll = `/developers/*`,
 
   // Impersonate

@@ -16,6 +16,7 @@ export enum SignInUpMode {
   SignIn = 'sign-in',
   SignUp = 'sign-up',
   Invite = 'invite',
+  AddMember = 'add-member',
 }
 
 export enum SignInUpStep {
@@ -88,20 +89,46 @@ export const useSignInUp = (form: UseFormReturn<Form>) => {
           throw new Error('Email and password are required');
         }
 
+        if (signInUpMode === SignInUpMode.AddMember) {
+          console.log('ssfdsfsf');
+          await signUpWithCredentials(
+            data.email.toLowerCase().trim(),
+            data.password,
+            data.workspaceInviteHash,
+          );
+        } else {
+          const {
+            workspace: currentWorkspace,
+            workspaceMember: currentWorkspaceMember,
+          } =
+            signInUpMode === SignInUpMode.SignIn
+              ? await signInWithCredentials(
+                data.email.toLowerCase().trim(),
+                data.password,
+              )
+              : await signUpWithCredentials(
+                data.email.toLowerCase().trim(),
+                data.password,
+                workspaceInviteHash,
+              );
+
+          navigateAfterSignInUp(currentWorkspace, currentWorkspaceMember);
+        }
+
         const {
           workspace: currentWorkspace,
           workspaceMember: currentWorkspaceMember,
         } =
           signInUpMode === SignInUpMode.SignIn
             ? await signInWithCredentials(
-                data.email.toLowerCase().trim(),
-                data.password,
-              )
+              data.email.toLowerCase().trim(),
+              data.password,
+            )
             : await signUpWithCredentials(
-                data.email.toLowerCase().trim(),
-                data.password,
-                workspaceInviteHash,
-              );
+              data.email.toLowerCase().trim(),
+              data.password,
+              workspaceInviteHash,
+            );
 
         navigateAfterSignInUp(currentWorkspace, currentWorkspaceMember);
       } catch (err: any) {
