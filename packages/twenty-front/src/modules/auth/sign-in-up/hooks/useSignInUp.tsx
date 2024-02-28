@@ -42,6 +42,9 @@ export const useSignInUp = (form: UseFormReturn<Form>) => {
     if (isMatchingLocation(AppPath.Invite)) {
       return SignInUpMode.Invite;
     }
+    if (isMatchingLocation(AppPath.SettingsWorkspaceMembers)) {
+      return SignInUpMode.AddMember;
+    }
 
     return isMatchingLocation(AppPath.SignIn)
       ? SignInUpMode.SignIn
@@ -51,6 +54,7 @@ export const useSignInUp = (form: UseFormReturn<Form>) => {
   const {
     signInWithCredentials,
     signUpWithCredentials,
+    addMemberWithCredentials,
     checkUserExists: { checkUserExistsQuery },
   } = useAuth();
 
@@ -89,9 +93,10 @@ export const useSignInUp = (form: UseFormReturn<Form>) => {
           throw new Error('Email and password are required');
         }
 
+        console.log(signInUpMode);
         if (signInUpMode === SignInUpMode.AddMember) {
-          console.log('ssfdsfsf');
-          await signUpWithCredentials(
+          console.log(data);
+          const { email } = await addMemberWithCredentials(
             data.email.toLowerCase().trim(),
             data.password,
             data.workspaceInviteHash,
@@ -115,22 +120,22 @@ export const useSignInUp = (form: UseFormReturn<Form>) => {
           navigateAfterSignInUp(currentWorkspace, currentWorkspaceMember);
         }
 
-        const {
-          workspace: currentWorkspace,
-          workspaceMember: currentWorkspaceMember,
-        } =
-          signInUpMode === SignInUpMode.SignIn
-            ? await signInWithCredentials(
-              data.email.toLowerCase().trim(),
-              data.password,
-            )
-            : await signUpWithCredentials(
-              data.email.toLowerCase().trim(),
-              data.password,
-              workspaceInviteHash,
-            );
-
-        navigateAfterSignInUp(currentWorkspace, currentWorkspaceMember);
+        // const {
+        //   workspace: currentWorkspace,
+        //   workspaceMember: currentWorkspaceMember,
+        // } =
+        //   signInUpMode === SignInUpMode.SignIn
+        //     ? await signInWithCredentials(
+        //       data.email.toLowerCase().trim(),
+        //       data.password,
+        //     )
+        //     : await signUpWithCredentials(
+        //       data.email.toLowerCase().trim(),
+        //       data.password,
+        //       workspaceInviteHash,
+        //     );
+        //
+        // navigateAfterSignInUp(currentWorkspace, currentWorkspaceMember);
       } catch (err: any) {
         enqueueSnackBar(err?.message, {
           variant: 'error',

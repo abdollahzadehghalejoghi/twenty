@@ -13,9 +13,8 @@ const validationSchema = z
     password: z
       .string()
       .regex(PASSWORD_REGEX, 'رمز عبور باید حداقل 8 کاراکتر داشته باشد'),
-    workspaceInviteHash: z.string(),
-  })
-  .required();
+    workspaceInviteHash: z.string().optional(),
+  });
 
 export type Form = z.infer<typeof validationSchema>;
 export const useSignInUpForm = () => {
