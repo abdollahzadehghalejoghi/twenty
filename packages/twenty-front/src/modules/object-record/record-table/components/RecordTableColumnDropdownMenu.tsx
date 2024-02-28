@@ -41,7 +41,7 @@ export const RecordTableColumnDropdownMenu = ({
 
     if (!canMoveLeft) return;
 
-    handleMoveTableColumn('left', column);
+    handleMoveTableColumn('right', column);
   };
 
   const handleColumnMoveRight = () => {
@@ -49,7 +49,7 @@ export const RecordTableColumnDropdownMenu = ({
 
     if (!canMoveRight) return;
 
-    handleMoveTableColumn('right', column);
+    handleMoveTableColumn('left', column);
   };
 
   const handleColumnVisibility = () => {

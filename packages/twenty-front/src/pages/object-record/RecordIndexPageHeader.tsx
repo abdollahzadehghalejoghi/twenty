@@ -8,7 +8,7 @@ import { PageAddButton } from '@/ui/layout/page/PageAddButton';
 import { PageHeader } from '@/ui/layout/page/PageHeader';
 import { PageHotkeysEffect } from '@/ui/layout/page/PageHotkeysEffect';
 import { ViewType } from '@/views/types/ViewType';
-import { capitalize } from '~/utils/string/capitalize';
+// import { capitalize } from '~/utils/string/capitalize';
 
 type RecordIndexPageHeaderProps = {
   createRecord: () => void;
@@ -23,6 +23,7 @@ export const RecordIndexPageHeader = ({
     useObjectMetadataItemForSettings();
 
   const { getIcon } = useIcons();
+
   const Icon = getIcon(
     findObjectMetadataItemByNamePlural(objectNamePlural)?.icon,
   );
@@ -30,7 +31,7 @@ export const RecordIndexPageHeader = ({
   const recordIndexViewType = useRecoilValue(recordIndexViewTypeState);
 
   return (
-    <PageHeader title={capitalize(objectNamePlural)} Icon={Icon}>
+    <PageHeader title={findObjectMetadataItemByNamePlural(objectNamePlural)?.labelPlural || ''} Icon={Icon}>
       <PageHotkeysEffect onAddButtonClick={createRecord} />
       {recordIndexViewType === ViewType.Table && (
         <PageAddButton onClick={createRecord} />

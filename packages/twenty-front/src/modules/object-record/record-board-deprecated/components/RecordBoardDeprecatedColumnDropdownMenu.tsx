@@ -87,7 +87,7 @@ export const RecordBoardDeprecatedColumnDropdownMenu = ({
     if (isFirstColumn) {
       return;
     }
-    handleMoveBoardColumn('left', columnDefinition);
+    handleMoveBoardColumn('right', columnDefinition);
   };
 
   const handleColumnMoveRight = () => {
@@ -95,7 +95,7 @@ export const RecordBoardDeprecatedColumnDropdownMenu = ({
     if (isLastColumn) {
       return;
     }
-    handleMoveBoardColumn('right', columnDefinition);
+    handleMoveBoardColumn('left', columnDefinition);
   };
 
   return (

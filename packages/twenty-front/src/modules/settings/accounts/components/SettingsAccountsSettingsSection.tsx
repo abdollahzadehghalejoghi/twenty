@@ -37,16 +37,16 @@ export const SettingsAccountsSettingsSection = () => {
         >
           {translate('setEmailVisibilityManage')}
         </SettingsNavigationCard>
-        <SettingsNavigationCard
-          Icon={IconCalendarEvent}
-          title={translate('calendar')}
-          soon={!isCalendarEnabled}
-          onClick={() =>
-            navigate(getSettingsPagePath(SettingsPath.AccountsCalendars))
-          }
-        >
-          {translate('configureAndCustomizeYourCalendarPreferences')}
-        </SettingsNavigationCard>
+        {/*<SettingsNavigationCard*/}
+        {/*  Icon={IconCalendarEvent}*/}
+        {/*  title={translate('calendar')}*/}
+        {/*  soon={!isCalendarEnabled}*/}
+        {/*  onClick={() =>*/}
+        {/*    navigate(getSettingsPagePath(SettingsPath.AccountsCalendars))*/}
+        {/*  }*/}
+        {/*>*/}
+        {/*  {translate('configureAndCustomizeYourCalendarPreferences')}*/}
+        {/*</SettingsNavigationCard>*/}
       </StyledCardsContainer>
     </Section>
   );

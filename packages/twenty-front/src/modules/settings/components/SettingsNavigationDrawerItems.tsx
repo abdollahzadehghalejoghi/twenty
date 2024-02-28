@@ -67,14 +67,14 @@ export const SettingsNavigationDrawerItems = () => {
               Icon={IconMail}
               matchSubPages
             />
-            <SettingsNavigationDrawerItem
-              level={2}
-              label={translate('calendars')}
-              path={SettingsPath.AccountsCalendars}
-              Icon={IconCalendarEvent}
-              matchSubPages
-              soon={!isCalendarEnabled}
-            />
+            {/*<SettingsNavigationDrawerItem*/}
+            {/*  level={2}*/}
+            {/*  label={translate('calendars')}*/}
+            {/*  path={SettingsPath.AccountsCalendars}*/}
+            {/*  Icon={IconCalendarEvent}*/}
+            {/*  matchSubPages*/}
+            {/*  soon={!isCalendarEnabled}*/}
+            {/*/>*/}
           </NavigationDrawerItemGroup>
         )}
       </NavigationDrawerSection>
