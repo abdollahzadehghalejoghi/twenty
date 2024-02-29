@@ -1,181 +1,170 @@
-import { useCallback, useState } from 'react';
-import { SubmitHandler, UseFormReturn } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import {useCallback, useState} from 'react';
+import {SubmitHandler, UseFormReturn} from 'react-hook-form';
+import {useParams} from 'react-router-dom';
 
-import { useNavigateAfterSignInUp } from '@/auth/sign-in-up/hooks/useNavigateAfterSignInUp.ts';
-import { Form } from '@/auth/sign-in-up/hooks/useSignInUpForm.ts';
-import { AppPath } from '@/types/AppPath';
-import { PageHotkeyScope } from '@/types/PageHotkeyScope';
-import { useSnackBar } from '@/ui/feedback/snack-bar-manager/hooks/useSnackBar';
-import { useScopedHotkeys } from '@/ui/utilities/hotkey/hooks/useScopedHotkeys';
-import { useIsMatchingLocation } from '~/hooks/useIsMatchingLocation';
+import {useNavigateAfterSignInUp} from '@/auth/sign-in-up/hooks/useNavigateAfterSignInUp.ts';
+import {Form} from '@/auth/sign-in-up/hooks/useSignInUpForm.ts';
+import {AppPath} from '@/types/AppPath';
+import {PageHotkeyScope} from '@/types/PageHotkeyScope';
+import {useSnackBar} from '@/ui/feedback/snack-bar-manager/hooks/useSnackBar';
+import {useScopedHotkeys} from '@/ui/utilities/hotkey/hooks/useScopedHotkeys';
+import {useIsMatchingLocation} from '~/hooks/useIsMatchingLocation';
 
-import { useAuth } from '../../hooks/useAuth';
+import {useAuth} from '../../hooks/useAuth';
 
 export enum SignInUpMode {
-  SignIn = 'sign-in',
-  SignUp = 'sign-up',
-  Invite = 'invite',
-  AddMember = 'add-member',
+    SignIn = 'sign-in',
+    SignUp = 'sign-up',
+    Invite = 'invite',
+    AddMember = 'add-member',
 }
 
 export enum SignInUpStep {
-  Init = 'init',
-  Email = 'email',
-  Password = 'password',
+    Init = 'init',
+    Email = 'email',
+    Password = 'password',
 }
 
 export const useSignInUp = (form: UseFormReturn<Form>) => {
-  const { enqueueSnackBar } = useSnackBar();
+    const {enqueueSnackBar} = useSnackBar();
 
-  const isMatchingLocation = useIsMatchingLocation();
+    const isMatchingLocation = useIsMatchingLocation();
 
-  const workspaceInviteHash = useParams().workspaceInviteHash;
+    const workspaceInviteHash = useParams().workspaceInviteHash;
 
-  const { navigateAfterSignInUp } = useNavigateAfterSignInUp();
+    const {navigateAfterSignInUp} = useNavigateAfterSignInUp();
 
-  const [signInUpStep, setSignInUpStep] = useState<SignInUpStep>(
-    SignInUpStep.Init,
-  );
-
-  const [signInUpMode, setSignInUpMode] = useState<SignInUpMode>(() => {
-    if (isMatchingLocation(AppPath.Invite)) {
-      return SignInUpMode.Invite;
-    }
-    if (isMatchingLocation(AppPath.SettingsWorkspaceMembers)) {
-      return SignInUpMode.AddMember;
-    }
-
-    return isMatchingLocation(AppPath.SignIn)
-      ? SignInUpMode.SignIn
-      : SignInUpMode.SignUp;
-  });
-
-  const {
-    signInWithCredentials,
-    signUpWithCredentials,
-    addMemberWithCredentials,
-    checkUserExists: { checkUserExistsQuery },
-  } = useAuth();
-
-  const continueWithEmail = useCallback(() => {
-    setSignInUpStep(SignInUpStep.Email);
-    setSignInUpMode(
-      isMatchingLocation(AppPath.SignIn)
-        ? SignInUpMode.SignIn
-        : SignInUpMode.SignUp,
+    const [signInUpStep, setSignInUpStep] = useState<SignInUpStep>(
+        SignInUpStep.Init,
     );
-  }, [setSignInUpStep, setSignInUpMode, isMatchingLocation]);
 
-  const continueWithCredentials = useCallback(() => {
-    if (!form.getValues('email')) {
-      return;
-    }
-    checkUserExistsQuery({
-      variables: {
-        email: form.getValues('email').toLowerCase().trim(),
-      },
-      onCompleted: (data) => {
-        if (data?.checkUserExists.exists) {
-          setSignInUpMode(SignInUpMode.SignIn);
-        } else {
-          setSignInUpMode(SignInUpMode.SignUp);
+    const [signInUpMode, setSignInUpMode] = useState<SignInUpMode>(() => {
+        if (isMatchingLocation(AppPath.Invite)) {
+            return SignInUpMode.Invite;
         }
-        setSignInUpStep(SignInUpStep.Password);
-      },
+        if (isMatchingLocation(AppPath.SettingsWorkspaceMembers)) {
+            return SignInUpMode.AddMember;
+        }
+
+        return isMatchingLocation(AppPath.SignIn)
+            ? SignInUpMode.SignIn
+            : SignInUpMode.SignUp;
     });
-  }, [setSignInUpStep, checkUserExistsQuery, form, setSignInUpMode]);
 
-  const submitCredentials: SubmitHandler<Form> = useCallback(
-    async (data) => {
-      try {
-        if (!data.email || !data.password) {
-          throw new Error('Email and password are required');
+    const {
+        signInWithCredentials,
+        signUpWithCredentials,
+        addMemberWithCredentials,
+        checkUserExists: {checkUserExistsQuery},
+    } = useAuth();
+
+    const continueWithEmail = useCallback(() => {
+        setSignInUpStep(SignInUpStep.Email);
+        setSignInUpMode(
+            isMatchingLocation(AppPath.SignIn)
+                ? SignInUpMode.SignIn
+                : SignInUpMode.SignUp,
+        );
+    }, [setSignInUpStep, setSignInUpMode, isMatchingLocation]);
+
+    const continueWithCredentials = useCallback(() => {
+        if (!form.getValues('email')) {
+            return;
         }
-
-        console.log(signInUpMode);
-        if (signInUpMode === SignInUpMode.AddMember) {
-          console.log(data);
-          const { email } = await addMemberWithCredentials(
-            data.email.toLowerCase().trim(),
-            data.password,
-            data.workspaceInviteHash,
-          );
-        } else {
-          const {
-            workspace: currentWorkspace,
-            workspaceMember: currentWorkspaceMember,
-          } =
-            signInUpMode === SignInUpMode.SignIn
-              ? await signInWithCredentials(
-                data.email.toLowerCase().trim(),
-                data.password,
-              )
-              : await signUpWithCredentials(
-                data.email.toLowerCase().trim(),
-                data.password,
-                workspaceInviteHash,
-              );
-
-          navigateAfterSignInUp(currentWorkspace, currentWorkspaceMember);
-        }
-
-        // const {
-        //   workspace: currentWorkspace,
-        //   workspaceMember: currentWorkspaceMember,
-        // } =
-        //   signInUpMode === SignInUpMode.SignIn
-        //     ? await signInWithCredentials(
-        //       data.email.toLowerCase().trim(),
-        //       data.password,
-        //     )
-        //     : await signUpWithCredentials(
-        //       data.email.toLowerCase().trim(),
-        //       data.password,
-        //       workspaceInviteHash,
-        //     );
-        //
-        // navigateAfterSignInUp(currentWorkspace, currentWorkspaceMember);
-      } catch (err: any) {
-        enqueueSnackBar(err?.message, {
-          variant: 'error',
+        checkUserExistsQuery({
+            variables: {
+                email: form.getValues('email').toLowerCase().trim(),
+            },
+            onCompleted: (data) => {
+                if (data?.checkUserExists.exists) {
+                    setSignInUpMode(SignInUpMode.SignIn);
+                } else {
+                    setSignInUpMode(SignInUpMode.SignUp);
+                }
+                setSignInUpStep(SignInUpStep.Password);
+            },
         });
-      }
-    },
-    [
-      signInUpMode,
-      signInWithCredentials,
-      signUpWithCredentials,
-      workspaceInviteHash,
-      navigateAfterSignInUp,
-      enqueueSnackBar,
-    ],
-  );
+    }, [setSignInUpStep, checkUserExistsQuery, form, setSignInUpMode]);
 
-  useScopedHotkeys(
-    'enter',
-    () => {
-      if (signInUpStep === SignInUpStep.Init) {
-        continueWithEmail();
-      }
+    const submitCredentials: SubmitHandler<Form> = useCallback(
+        async (data) => {
+            try {
+                if (!data.email || !data.password) {
+                    throw new Error('ایمیل و رمز عبور الزامی است');
+                }
 
-      if (signInUpStep === SignInUpStep.Email) {
-        continueWithCredentials();
-      }
 
-      if (signInUpStep === SignInUpStep.Password) {
-        form.handleSubmit(submitCredentials)();
-      }
-    },
-    PageHotkeyScope.SignInUp,
-    [continueWithEmail],
-  );
+                if (signInUpMode === SignInUpMode.AddMember) {
+                    console.log(data);
+                    const {email} = await addMemberWithCredentials(
+                        data.email.toLowerCase().trim(),
+                        data.password,
+                        data.workspaceInviteHash,
+                    );
+                    if (email){
+                        enqueueSnackBar('ثبت عضو با موفقیت انجام شد', {
+                            variant: 'success',
+                        });
+                    }
+                } else {
+                    const {
+                        workspace: currentWorkspace,
+                        workspaceMember: currentWorkspaceMember,
+                    } =
+                        signInUpMode === SignInUpMode.SignIn
+                            ? await signInWithCredentials(
+                                data.email.toLowerCase().trim(),
+                                data.password,
+                            )
+                            : await signUpWithCredentials(
+                                data.email.toLowerCase().trim(),
+                                data.password,
+                                workspaceInviteHash,
+                            );
 
-  return {
-    signInUpStep,
-    signInUpMode,
-    continueWithCredentials,
-    continueWithEmail,
-    submitCredentials,
-  };
+                    navigateAfterSignInUp(currentWorkspace, currentWorkspaceMember);
+                }
+
+            } catch (err: any) {
+                enqueueSnackBar(err?.message, {
+                    variant: 'error',
+                });
+            }
+        },
+        [
+            signInUpMode,
+            signInWithCredentials,
+            signUpWithCredentials,
+            workspaceInviteHash,
+            navigateAfterSignInUp,
+            enqueueSnackBar,
+        ],
+    );
+
+    useScopedHotkeys(
+        'enter',
+        () => {
+            if (signInUpStep === SignInUpStep.Init) {
+                continueWithEmail();
+            }
+
+            if (signInUpStep === SignInUpStep.Email) {
+                continueWithCredentials();
+            }
+
+            if (signInUpStep === SignInUpStep.Password) {
+                form.handleSubmit(submitCredentials)();
+            }
+        },
+        PageHotkeyScope.SignInUp,
+        [continueWithEmail],
+    );
+
+    return {
+        signInUpStep,
+        signInUpMode,
+        continueWithCredentials,
+        continueWithEmail,
+        submitCredentials,
+    };
 };

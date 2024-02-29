@@ -43,6 +43,7 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;
+    margin-bottom: 40px;
 `;
 
 const StyledFullWidthMotionDiv = styled(motion.div)`
@@ -64,23 +65,21 @@ export const SettingsWorkspaceMembers = () => {
 
   const {
     signInUpStep,
-    continueWithCredentials,
-    continueWithEmail,
     submitCredentials,
   } = useSignInUp(form);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault();
+      form.setValue('workspaceInviteHash', currentWorkspace?.inviteHash || '');
+      form.handleSubmit(submitCredentials)();
+      form.reset({
+          email: '',
+          password: '',
+          exist: false,
+          workspaceInviteHash: currentWorkspace?.inviteHash || '',
+      });
 
-      if (signInUpStep === SignInUpStep.Init) {
-        continueWithEmail();
-      } else if (signInUpStep === SignInUpStep.Email) {
-        continueWithCredentials();
-      } else if (signInUpStep === SignInUpStep.Password) {
-        setShowErrors(true);
-        form.handleSubmit(submitCredentials)();
-      }
     }
   };
 
@@ -149,9 +148,6 @@ export const SettingsWorkspaceMembers = () => {
                       onBlur={onBlur}
                       onChange={(value: string) => {
                         onChange(value);
-                        if (signInUpStep === SignInUpStep.Password) {
-                          continueWithEmail();
-                        }
                       }}
                       error={showErrors ? error?.message : undefined}
                       onKeyDown={handleKeyDown}
@@ -199,11 +195,17 @@ export const SettingsWorkspaceMembers = () => {
 
             <MainButton
               variant="secondary"
-              title={translate('signUp')}
+              title={translate('addMember')}
               type="submit"
               onClick={() => {
                 form.setValue('workspaceInviteHash', currentWorkspace?.inviteHash || '')
                 form.handleSubmit(submitCredentials)();
+                form.reset({
+                      email: '',
+                      password: '',
+                      exist: false,
+                      workspaceInviteHash: currentWorkspace?.inviteHash || '',
+                });
               }}
               Icon={() => form.formState.isSubmitting && <Loader />}
               disabled={
@@ -245,7 +247,7 @@ export const SettingsWorkspaceMembers = () => {
       <ConfirmationModal
         isOpen={isConfirmationModalOpen}
         setIsOpen={setIsConfirmationModalOpen}
-        title="Account Deletion"
+        title={translate('accountDeletion')}
         subtitle={<>{translate('accountDeletionDes')}</>}
         onConfirmClick={() =>
           workspaceMemberToDelete &&

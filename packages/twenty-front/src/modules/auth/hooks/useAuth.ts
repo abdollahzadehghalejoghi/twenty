@@ -204,7 +204,7 @@ export const useAuth = () => {
 
   const handleAddMemberWithCredentials = useCallback(
     async (email: string, password: string, workspaceInviteHash?: string) => {
-      setIsVerifyPendingState(true);
+      // setIsVerifyPendingState(true);
 
       const signUpResult = await signUp({
         variables: {
@@ -226,7 +226,7 @@ export const useAuth = () => {
       //   signUpResult.data?.signUp.loginToken.token,
       // );
 
-      setIsVerifyPendingState(false);
+      // setIsVerifyPendingState(false);
 
       return { email };
     },
