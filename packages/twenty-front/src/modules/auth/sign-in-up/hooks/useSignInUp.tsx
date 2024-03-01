@@ -1,6 +1,6 @@
 import {useCallback, useState} from 'react';
 import {SubmitHandler, UseFormReturn} from 'react-hook-form';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 
 import {useNavigateAfterSignInUp} from '@/auth/sign-in-up/hooks/useNavigateAfterSignInUp.ts';
 import {Form} from '@/auth/sign-in-up/hooks/useSignInUpForm.ts';
@@ -26,6 +26,7 @@ export enum SignInUpStep {
 }
 
 export const useSignInUp = (form: UseFormReturn<Form>) => {
+    const navigate = useNavigate();
     const {enqueueSnackBar} = useSnackBar();
 
     const isMatchingLocation = useIsMatchingLocation();
@@ -95,7 +96,6 @@ export const useSignInUp = (form: UseFormReturn<Form>) => {
 
 
                 if (signInUpMode === SignInUpMode.AddMember) {
-                    console.log(data);
                     const {email} = await addMemberWithCredentials(
                         data.email.toLowerCase().trim(),
                         data.password,
@@ -105,6 +105,8 @@ export const useSignInUp = (form: UseFormReturn<Form>) => {
                         enqueueSnackBar('ثبت عضو با موفقیت انجام شد', {
                             variant: 'success',
                         });
+
+                        navigate(0);
                     }
                 } else {
                     const {
