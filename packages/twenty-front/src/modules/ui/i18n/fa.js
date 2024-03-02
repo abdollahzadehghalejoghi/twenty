@@ -354,5 +354,6 @@ const fa = {
   thereWasAnErrorWhileUpdatingPassword: 'هنگام به‌روزرسانی رمز عبور خطایی روی داد.',
   passwordHasBeenUpdated: 'رمز عبور به روز شده است',
   anErrorOccurredWhileUpdatingPassword: 'هنگام به‌روزرسانی رمز عبور خطایی روی داد',
+  addMember: 'افزودن عضو',
 };
 export default fa;

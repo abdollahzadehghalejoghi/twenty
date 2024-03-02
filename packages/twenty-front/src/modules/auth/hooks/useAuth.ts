@@ -202,6 +202,37 @@ export const useAuth = () => {
     [setIsVerifyPendingState, signUp, handleVerify],
   );
 
+  const handleAddMemberWithCredentials = useCallback(
+    async (email: string, password: string, workspaceInviteHash?: string) => {
+      // setIsVerifyPendingState(true);
+
+      const signUpResult = await signUp({
+        variables: {
+          email,
+          password,
+          workspaceInviteHash,
+        },
+      });
+
+      if (signUpResult.errors) {
+        throw signUpResult.errors;
+      }
+
+      if (!signUpResult.data?.signUp) {
+        throw new Error('No login token');
+      }
+
+      // const { user, workspace, workspaceMember } = await handleVerify(
+      //   signUpResult.data?.signUp.loginToken.token,
+      // );
+
+      // setIsVerifyPendingState(false);
+
+      return { email };
+    },
+    [setIsVerifyPendingState, signUp, handleVerify],
+  );
+
   const handleGoogleLogin = useCallback((workspaceInviteHash?: string) => {
     const authServerUrl = REACT_APP_SERVER_AUTH_URL;
     window.location.href =
@@ -220,5 +251,6 @@ export const useAuth = () => {
     signUpWithCredentials: handleCredentialsSignUp,
     signInWithCredentials: handleCrendentialsSignIn,
     signInWithGoogle: handleGoogleLogin,
+    addMemberWithCredentials: handleAddMemberWithCredentials,
   };
 };

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRecoilValue } from 'recoil';
@@ -10,12 +9,12 @@ import { isSignInPrefilledState } from '@/client-config/states/isSignInPrefilled
 const validationSchema = z
   .object({
     exist: z.boolean(),
-    email: z.string().trim().email('Email must be a valid email'),
+    email: z.string().trim().email('ایمیل باید معتبر باشد'),
     password: z
       .string()
-      .regex(PASSWORD_REGEX, 'Password must contain at least 8 characters'),
-  })
-  .required();
+      .regex(PASSWORD_REGEX, 'رمز عبور باید حداقل 8 کاراکتر داشته باشد'),
+    workspaceInviteHash: z.string().optional(),
+  });
 
 export type Form = z.infer<typeof validationSchema>;
 export const useSignInUpForm = () => {
@@ -28,11 +27,5 @@ export const useSignInUpForm = () => {
     resolver: zodResolver(validationSchema),
   });
 
-  useEffect(() => {
-    if (isSignInPrefilled) {
-      form.setValue('email', 'tim@apple.dev');
-      form.setValue('password', 'Applecar2025');
-    }
-  }, [form, isSignInPrefilled]);
   return { form: form };
 };

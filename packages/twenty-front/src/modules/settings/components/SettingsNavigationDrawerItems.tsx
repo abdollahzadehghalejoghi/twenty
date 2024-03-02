@@ -97,16 +97,16 @@ export const SettingsNavigationDrawerItems = () => {
           Icon={IconHierarchy2}
           matchSubPages
         />
-        <SettingsNavigationDrawerItem
-          label={translate('developers')}
-          path={SettingsPath.Developers}
-          Icon={IconRobot}
-        />
-        <SettingsNavigationDrawerItem
-          label={translate('integrations')}
-          path={SettingsPath.Integrations}
-          Icon={IconApps}
-        />
+        {/*<SettingsNavigationDrawerItem*/}
+        {/*  label={translate('developers')}*/}
+        {/*  path={SettingsPath.Developers}*/}
+        {/*  Icon={IconRobot}*/}
+        {/*/>*/}
+        {/*<SettingsNavigationDrawerItem*/}
+        {/*  label={translate('integrations')}*/}
+        {/*  path={SettingsPath.Integrations}*/}
+        {/*  Icon={IconApps}*/}
+        {/*/>*/}
       </NavigationDrawerSection>
 
       <NavigationDrawerSection>

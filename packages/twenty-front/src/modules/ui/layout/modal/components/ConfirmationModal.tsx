@@ -15,6 +15,7 @@ import {
   SectionAlignment,
   SectionFontColor,
 } from '@/ui/layout/section/components/Section';
+import useI18n from "@/ui/i18n/useI18n";
 
 export type ConfirmationModalProps = {
   isOpen: boolean;
@@ -63,6 +64,7 @@ export const ConfirmationModal = ({
   confirmationValue,
   confirmationPlaceholder,
 }: ConfirmationModalProps) => {
+    const { translate } = useI18n('translations');
   const [inputConfirmationValue, setInputConfirmationValue] =
     useState<string>('');
   const [isValidValue, setIsValidValue] = useState(!confirmationValue);
@@ -122,7 +124,7 @@ export const ConfirmationModal = ({
           <StyledCenteredButton
             onClick={() => setIsOpen(false)}
             variant="secondary"
-            title="Cancel"
+            title={translate('cancel')}
             fullWidth
           />
         </StyledConfirmationModal>
