@@ -38,7 +38,7 @@ const StyledButtonContainer = styled.div`
 
 const validationSchema = z
   .object({
-    name: z.string().min(1, { message: 'Name can not be empty' }),
+    name: z.string().min(1, { message: 'نام نمی تواند خالی باید' }),
   })
   .required();
 
